@@ -15,7 +15,7 @@ import './js/directives.js'
 import promise from 'es6-promise'
 promise.polyfill();
 
-Vue.use(ElementUI);
+Vue.use(ElementUI, { size: 'small' });
 
 Vue.config.productionTip = false
 
