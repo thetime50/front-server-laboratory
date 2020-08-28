@@ -1,5 +1,5 @@
 <template>
-<div class="component-signin">
+<div class="component-signin flex-layout justify-start">
     <template v-if="!username">
         <div class="title">登录</div>
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
@@ -16,10 +16,13 @@
         </el-form>
     </template>
     <template v-else>
-        <div class="user">
+        <div class="user flex-none">
             用户：{{username}}
         </div>
-        <el-button type="primary" @click="logout()">注销</el-button>
+        <div class="flex-none">
+            <el-button type="primary" @click="logout()">注销</el-button>
+        </div>
+        <userlist class="flex-auto"/>
     </template>
 </div>
 </template>
@@ -27,9 +30,13 @@
 <script>
 /* message */
 import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
+import userlist from "./userlist.vue"
 
 export default {
     name: "signin",
+    components:{
+        userlist,
+    },
     data () {
         return {
             ruleForm: {
@@ -125,8 +132,8 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
 .component-signin{
     padding: 20px;
-    color: #1989fa;
     .title{
+        color: #1989fa;
         font-size: 60px;
     }
     .user{
