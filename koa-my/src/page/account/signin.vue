@@ -1,23 +1,32 @@
 <template>
 <div class="component-signin">
-    <div>登录</div>
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-        <el-form-item label="名称" prop="name">
-            <el-input v-model="ruleForm.name"></el-input>
-        </el-form-item>
-        <el-form-item label="密码" prop="pass">
-            <el-input type="password" v-model="ruleForm.pass" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item>
-            <el-button type="primary" @click="submitForm">登录</el-button>
-            <el-button @click="resetForm">重置</el-button>
-        </el-form-item>
-    </el-form>
+    <template v-if="!username">
+        <div class="title">登录</div>
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+            <el-form-item label="名称" prop="name">
+                <el-input v-model="ruleForm.name"></el-input>
+            </el-form-item>
+            <el-form-item label="密码" prop="pass">
+                <el-input type="password" v-model="ruleForm.pass" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="submitForm">登录</el-button>
+                <el-button @click="resetForm">重置</el-button>
+            </el-form-item>
+        </el-form>
+    </template>
+    <template v-else>
+        <div class="user">
+            用户：{{username}}
+        </div>
+        <el-button type="primary" @click="logout()">注销</el-button>
+    </template>
 </div>
 </template>
 
 <script>
 /* message */
+import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
 
 export default {
     name: "signin",
@@ -51,6 +60,9 @@ export default {
             },
         }
     },
+    computed:{
+        ...mapState(['username'])
+    },
     methods:{
         //重置表单
         resetForm() {
@@ -81,7 +93,7 @@ export default {
                                 this.$store.dispatch('UserLogin', token);
                                 this.$store.dispatch('UserName', username);
                                 //跳到目标页
-                                this.$router.push('HelloWorld');
+                                // this.$router.push('HelloWorld');
                             }
                         });
                 } else {
@@ -90,14 +102,35 @@ export default {
                 }
             });
         },
+        logout(){
+            //清除token
+            this.$store.dispatch('UserLogout');
+            if (!this.$store.state.token) {
+                // this.$router.push('/login')
+                this.$message({
+                    type: 'success',
+                    message: '登出成功'
+                })
+            } else {
+                this.$message({
+                    type: 'info',
+                    message: '登出失败'
+                })
+            }
+        },
     },
 }
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 .component-signin{
-    color: #1989fa;
-    font-size: 60px;
     padding: 20px;
+    color: #1989fa;
+    .title{
+        font-size: 60px;
+    }
+    .user{
+        padding: 10px;
+    }
 }
 </style>
