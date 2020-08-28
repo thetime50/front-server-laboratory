@@ -15,7 +15,9 @@
     "echarts-gl": "^1.1.1",
     "element-ui": "^2.13.2",
     "moment": "^2.27.0",
+    "poplar-annotation": "^2.0.3",
     "vue": "^2.5.2",
+    "vue-json-pretty": "^1.6.7",
     "vue-resize-directive": "^1.2.0",
     "vue-router": "^3.0.1",
     "vuex": "^3.5.1"

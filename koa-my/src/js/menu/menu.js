@@ -1,4 +1,5 @@
 import accountMenu from "./accountMenu.js"
+import poplarMenu from "./poplarMenu.js"
 
 let menu = [
     {
@@ -7,6 +8,7 @@ let menu = [
         route:"home",
     },
     accountMenu,
+    poplarMenu,
 ]
 
 export {
