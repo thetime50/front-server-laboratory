@@ -1,6 +1,7 @@
 <template>
 <div class="component-graph" ref="graph">
     graph
+    <tstest/>
 </div>
 </template>
 
@@ -10,10 +11,14 @@
 // import {Action, Annotator} from "poplar-annotation";
 // import {LabelCategory} from "poplar-annotation/dist/Store/LabelCategory";
 // import {ConnectionCategory} from "poplar-annotation/dist/Store/ConnectionCategory";
+import tstest from "./tstest.vue"
 import {xyy} from './demo.js'
 
 export default {
     name: "graph",
+    components:{
+        tstest,
+    },
     data () {
         return {
         };
