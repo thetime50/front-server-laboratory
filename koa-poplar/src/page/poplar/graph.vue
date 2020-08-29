@@ -6,7 +6,7 @@
     <div class="flex-mean">
         <div class="code-container">
             <!-- <code v-html="this.json"></code> -->
-            <vue-json-pretty :data="annotator.store.json"/>
+            <vue-json-pretty :data="annotator && annotator.store.json"/>
         </div>
     </div>
 
@@ -79,139 +79,139 @@ export default Vue.extend({
         //     // this.json = ""
         // },
 
-        // addLabel(): void {
-        //     if (this.categorySelectMode === CategorySelectMode.Update) {
-        //         this.annotator.applyAction(Action.Label.Update(this.selectedId, this.selectedLabelCategory));
-        //     } else {
-        //         this.annotator.applyAction(Action.Label.Create(this.selectedLabelCategory, this.startIndex, this.endIndex));
-        //     }
-        //     this.showLabelCategoriesDialog = false;
-        //     this.updateJSON();
-        // },
-        // addConnection(): void {
-        //     if (this.categorySelectMode === CategorySelectMode.Update) {
-        //         this.annotator.applyAction(Action.Connection.Update(this.selectedId, this.selectedConnectionCategory));
-        //     } else {
-        //         this.annotator.applyAction(Action.Connection.Create(this.selectedConnectionCategory, this.from, this.to));
-        //     }
-        //     this.showConnectionCategoriesDialog = false;
-        //     this.updateJSON();
-        // },
-        // createAnnotator(): Annotator {
-        //     const annotator = new Annotator(this.jsonData, this.$refs.container as HTMLElement);
-        //     annotator.on("textSelected", (startIndex, endIndex) => {
-        //         this.startIndex = startIndex;
-        //         this.endIndex = endIndex;
-        //         this.categorySelectMode = CategorySelectMode.Create;
-        //         this.showLabelCategoriesDialog = true;
-        //     });
-        //     annotator.on("twoLabelsClicked", (fromLabelId, toLabelId) => {
-        //         this.from = fromLabelId;
-        //         this.to = toLabelId;
-        //         this.categorySelectMode = CategorySelectMode.Create;
-        //         this.showConnectionCategoriesDialog = true;
-        //     });
-        //     annotator.on("labelRightClicked", (labelId, event: MouseEvent) => {
-        //         if (event.ctrlKey) {
-        //             this.categorySelectMode = CategorySelectMode.Update;
-        //             this.selectedId = labelId;
-        //             this.showLabelCategoriesDialog = true;
-        //         } else {
-        //             annotator.applyAction(Action.Label.Delete(labelId));
-        //         }
-        //         // this.updateJSON();
-        //     });
-        //     annotator.on("connectionRightClicked", (connectionId, event: MouseEvent) => {
-        //         if (event.ctrlKey) {
-        //             this.categorySelectMode = CategorySelectMode.Update;
-        //             this.selectedId = connectionId;
-        //             this.showConnectionCategoriesDialog = true;
-        //         } else {
-        //             annotator.applyAction(Action.Connection.Delete(connectionId));
-        //         }
-        //         // this.updateJSON();
-        //     });
-        //     annotator.on("contentInput", (position, value) => {
-        //         annotator.applyAction(Action.Content.Splice(position, 0, value));
-        //         // this.updateJSON();
-        //     });
-        //     annotator.on("contentDelete", (position, length) => {
-        //         annotator.applyAction(Action.Content.Splice(position, length, ""));
-        //         // this.updateJSON();
-        //     });
-        //     return annotator;
-        // },
+        addLabel(): void {
+            if (this.categorySelectMode === CategorySelectMode.Update) {
+                this.annotator.applyAction(Action.Label.Update(this.selectedId, this.selectedLabelCategory));
+            } else {
+                this.annotator.applyAction(Action.Label.Create(this.selectedLabelCategory, this.startIndex, this.endIndex));
+            }
+            this.showLabelCategoriesDialog = false;
+            this.updateJSON();
+        },
+        addConnection(): void {
+            if (this.categorySelectMode === CategorySelectMode.Update) {
+                this.annotator.applyAction(Action.Connection.Update(this.selectedId, this.selectedConnectionCategory));
+            } else {
+                this.annotator.applyAction(Action.Connection.Create(this.selectedConnectionCategory, this.from, this.to));
+            }
+            this.showConnectionCategoriesDialog = false;
+            this.updateJSON();
+        },
+        createAnnotator(): Annotator {
+            const annotator = new Annotator(this.jsonData, this.$refs.container as HTMLElement);
+            annotator.on("textSelected", (startIndex, endIndex) => {
+                this.startIndex = startIndex;
+                this.endIndex = endIndex;
+                this.categorySelectMode = CategorySelectMode.Create;
+                this.showLabelCategoriesDialog = true;
+            });
+            annotator.on("twoLabelsClicked", (fromLabelId, toLabelId) => {
+                this.from = fromLabelId;
+                this.to = toLabelId;
+                this.categorySelectMode = CategorySelectMode.Create;
+                this.showConnectionCategoriesDialog = true;
+            });
+            annotator.on("labelRightClicked", (labelId, event: MouseEvent) => {
+                if (event.ctrlKey) {
+                    this.categorySelectMode = CategorySelectMode.Update;
+                    this.selectedId = labelId;
+                    this.showLabelCategoriesDialog = true;
+                } else {
+                    annotator.applyAction(Action.Label.Delete(labelId));
+                }
+                // this.updateJSON();
+            });
+            annotator.on("connectionRightClicked", (connectionId, event: MouseEvent) => {
+                if (event.ctrlKey) {
+                    this.categorySelectMode = CategorySelectMode.Update;
+                    this.selectedId = connectionId;
+                    this.showConnectionCategoriesDialog = true;
+                } else {
+                    annotator.applyAction(Action.Connection.Delete(connectionId));
+                }
+                // this.updateJSON();
+            });
+            annotator.on("contentInput", (position, value) => {
+                annotator.applyAction(Action.Content.Splice(position, 0, value));
+                // this.updateJSON();
+            });
+            annotator.on("contentDelete", (position, length) => {
+                annotator.applyAction(Action.Content.Splice(position, length, ""));
+                // this.updateJSON();
+            });
+            return annotator;
+        },
 
         // highlight(code: string): string {
         //     return Prism.highlight(code, Prism.languages.javascript, "javascript");
         // },
 
-        // download: function () {
-        //     const eleLink = document.createElement("a");
-        //     eleLink.download = "data.json";
-        //     eleLink.style.display = "none";
-        //     const blob = new Blob([JSON.stringify(this.annotator.store.json, null, 4)]);
-        //     eleLink.href = URL.createObjectURL(blob);
-        //     document.body.appendChild(eleLink);
-        //     eleLink.click();
-        //     document.body.removeChild(eleLink);
-        // },
-        // downloadSVG: function () {
-        //     const eleLink = document.createElement("a");
-        //     eleLink.download = "data.svg";
-        //     eleLink.style.display = "none";
-        //     const blob = new Blob([this.annotator.export()]);
-        //     eleLink.href = URL.createObjectURL(blob);
-        //     document.body.appendChild(eleLink);
-        //     eleLink.click();
-        //     document.body.removeChild(eleLink);
-        // },
+        download: function () {
+            const eleLink = document.createElement("a");
+            eleLink.download = "data.json";
+            eleLink.style.display = "none";
+            const blob = new Blob([JSON.stringify(this.annotator.store.json, null, 4)]);
+            eleLink.href = URL.createObjectURL(blob);
+            document.body.appendChild(eleLink);
+            eleLink.click();
+            document.body.removeChild(eleLink);
+        },
+        downloadSVG: function () {
+            const eleLink = document.createElement("a");
+            eleLink.download = "data.svg";
+            eleLink.style.display = "none";
+            const blob = new Blob([this.annotator.export()]);
+            eleLink.href = URL.createObjectURL(blob);
+            document.body.appendChild(eleLink);
+            eleLink.click();
+            document.body.removeChild(eleLink);
+        },
     },
     computed: {
-        // labelCategories(): LabelCategory.Entity[] {
-        //     if (this.annotator === null) {
-        //         return [];
-        //     }
-        //     const result = [];
-        //     for (const [_, category] of this.annotator.store.labelCategoryRepo) {
-        //         result.push(category);
-        //     }
-        //     return result;
-        // },
-        // connectionCategories(): ConnectionCategory.Entity[] {
-        //     if (this.annotator === null) {
-        //         return [];
-        //     }
-        //     const result = [];
-        //     for (const [_, category] of this.annotator.store.connectionCategoryRepo) {
-        //         result.push(category);
-        //     }
-        //     return result;
-        // }
+        labelCategories(): LabelCategory.Entity[] {
+            if (this.annotator === null) {
+                return [];
+            }
+            const result = [];
+            for (const [_, category] of this.annotator.store.labelCategoryRepo) {
+                result.push(category);
+            }
+            return result;
+        },
+        connectionCategories(): ConnectionCategory.Entity[] {
+            if (this.annotator === null) {
+                return [];
+            }
+            const result = [];
+            for (const [_, category] of this.annotator.store.connectionCategoryRepo) {
+                result.push(category);
+            }
+            return result;
+        }
     },
     created(): void {
-        // this.$eventbus.$on("fileUploaded", (jsonData: JSON) => {
-        //     this.jsonData = jsonData;
-        //     if (this.annotator !== null) {
-        //         this.annotator.remove();
-        //     }
-        //     if (this.jsonData !== null && this.jsonData.content) {
-        //         this.annotator = this.createAnnotator();
-        //         this.updateJSON();
-        //     }
-        // });
-        // this.$eventbus.$on("downloadRequest", () => {
-        //     this.download();
-        // });
-        // this.$eventbus.$on("downloadSVGRequest", () => {
-        //     this.downloadSVG();
-        // });
+        this.$eventbus.$on("fileUploaded", (jsonData: JSON) => {
+            this.jsonData = jsonData;
+            if (this.annotator !== null) {
+                this.annotator.remove();
+            }
+            if (this.jsonData !== null && this.jsonData.content) {
+                this.annotator = this.createAnnotator();
+                this.updateJSON();
+            }
+        });
+        this.$eventbus.$on("downloadRequest", () => {
+            this.download();
+        });
+        this.$eventbus.$on("downloadSVGRequest", () => {
+            this.downloadSVG();
+        });
     },
     mounted(): void {
-        // if (this.jsonData !== null && this.jsonData.content) {
-        //     this.annotator = this.createAnnotator();
-        //     // this.updateJSON();
-        // }
+        if (this.jsonData !== null && this.jsonData.content) {
+            this.annotator = this.createAnnotator();
+            // this.updateJSON();
+        }
     },
 })
 </script>
