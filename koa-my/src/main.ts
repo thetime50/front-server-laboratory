@@ -22,6 +22,7 @@ Vue.config.productionTip = false
 //全局方法
 Vue.prototype.axios = axios
 
+Vue.prototype.$eventbus = new Vue();
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

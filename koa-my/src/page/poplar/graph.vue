@@ -5,9 +5,31 @@
     </div>
     <div class="flex-mean">
         <div class="code-container">
-            <code v-html="this.json"></code>
+            <!-- <code v-html="this.json"></code> -->
+            <vue-json-pretty :data="annotator.store.json"/>
         </div>
     </div>
+
+    <!-- 标签分类 -->
+    <el-dialog 
+        title="标签分类"
+        width="150px" 
+        v-model="showLabelCategoriesDialog">
+        <el-radio-group v-model="selectedLabelCategory">
+            <el-radio :key="category.id"
+                     :label="category.text"
+                     :value="category.id"
+                     v-for="category in this.labelCategories"></el-radio>
+        </el-radio-group>
+        <template v-slot:footer>
+            <el-button @click="showLabelCategoriesDialog = false" type="primary">
+                取消
+            </el-button>
+            <v-btn @click="addLabel" type="primary">
+                确定
+            </v-btn>
+        </template>
+    </el-dialog>
 </div>
 </template>
 
@@ -19,6 +41,7 @@ import {LabelCategory} from "poplar-annotation/dist/Store/LabelCategory";
 import {ConnectionCategory} from "poplar-annotation/dist/Store/ConnectionCategory";
 import tstest from "./tstest.vue"
 import {xyy} from './demo.js'
+import vueJsonPretty from "vue-json-pretty"
 
 enum CategorySelectMode {
     Create,
@@ -26,15 +49,16 @@ enum CategorySelectMode {
 }
 
 import Vue from "vue";
-// export default Vue.extend({
-export default ({
+export default Vue.extend({
+// export default ({
     name: "graph",
     components: {
         // tstest,
+        vueJsonPretty,
     },
     data() {
         return {
-            jsonData: null,
+            jsonData: null,//'' as any,//Object | string//
             annotator: null as Annotator | null,
             selectedLabelCategory: null as LabelCategory.Entity | null,
             selectedConnectionCategory: null as ConnectionCategory.Entity | null,
@@ -52,7 +76,9 @@ export default ({
     methods: {
         // updateJSON(): void {
         //     this.json = this.highlight(JSON.stringify(this.annotator.store.json, null, 4));
+        //     // this.json = ""
         // },
+
         // addLabel(): void {
         //     if (this.categorySelectMode === CategorySelectMode.Update) {
         //         this.annotator.applyAction(Action.Label.Update(this.selectedId, this.selectedLabelCategory));
@@ -72,7 +98,7 @@ export default ({
         //     this.updateJSON();
         // },
         // createAnnotator(): Annotator {
-        //     const annotator = new Annotator(this.jsonData, this.$refs.container);
+        //     const annotator = new Annotator(this.jsonData, this.$refs.container as HTMLElement);
         //     annotator.on("textSelected", (startIndex, endIndex) => {
         //         this.startIndex = startIndex;
         //         this.endIndex = endIndex;
@@ -93,7 +119,7 @@ export default ({
         //         } else {
         //             annotator.applyAction(Action.Label.Delete(labelId));
         //         }
-        //         this.updateJSON();
+        //         // this.updateJSON();
         //     });
         //     annotator.on("connectionRightClicked", (connectionId, event: MouseEvent) => {
         //         if (event.ctrlKey) {
@@ -103,21 +129,23 @@ export default ({
         //         } else {
         //             annotator.applyAction(Action.Connection.Delete(connectionId));
         //         }
-        //         this.updateJSON();
+        //         // this.updateJSON();
         //     });
         //     annotator.on("contentInput", (position, value) => {
         //         annotator.applyAction(Action.Content.Splice(position, 0, value));
-        //         this.updateJSON();
+        //         // this.updateJSON();
         //     });
         //     annotator.on("contentDelete", (position, length) => {
         //         annotator.applyAction(Action.Content.Splice(position, length, ""));
-        //         this.updateJSON();
+        //         // this.updateJSON();
         //     });
         //     return annotator;
         // },
+
         // highlight(code: string): string {
         //     return Prism.highlight(code, Prism.languages.javascript, "javascript");
         // },
+
         // download: function () {
         //     const eleLink = document.createElement("a");
         //     eleLink.download = "data.json";
@@ -182,7 +210,7 @@ export default ({
     mounted(): void {
         // if (this.jsonData !== null && this.jsonData.content) {
         //     this.annotator = this.createAnnotator();
-        //     this.updateJSON();
+        //     // this.updateJSON();
         // }
     },
 })
@@ -213,14 +241,14 @@ export default ({
         height: calc(100vh - 64px);
     }
 
-    code {
-        max-width: calc(45vw - 16px);
-        background: rgb(32, 32, 32) !important;
-        box-shadow: none !important;
-        padding: 8px !important;
-        padding-right: 40px !important;
-        margin-bottom: 20px;
-    }
+    // code {
+    //     max-width: calc(45vw - 16px);
+    //     background: rgb(32, 32, 32) !important;
+    //     box-shadow: none !important;
+    //     padding: 8px !important;
+    //     padding-right: 40px !important;
+    //     margin-bottom: 20px;
+    // }
 }
 </style>
 <style rel="stylesheet/scss" lang="scss">
