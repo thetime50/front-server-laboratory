@@ -7,5 +7,17 @@ module.exports = {
     //   localeDir: 'locales',
     //   enableInSFC: true
     // }
+  },
+  
+  // devServer 选项单独配置
+  devServer: {
+    https: false,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8888',
+        changeOrigin: true,
+      }
+    },
   }
+
 }
