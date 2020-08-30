@@ -102,6 +102,45 @@ export default Vue.extend({
             selectedId: -1
         };
     },
+    created(): void {
+        this.$eventbus.$on("fileUploaded", (jsonData: JSON) => {
+            this.loadJSON(jsonData)
+        });
+        // this.$eventbus.$on("downloadRequest", () => {
+        //     this.download();
+        // });
+        // this.$eventbus.$on("downloadSVGRequest", () => {
+        //     this.downloadSVG();
+        // });
+    },
+    mounted(): void {
+        if (this.jsonData !== null && this.jsonData.content) {
+            this.annotator = this.createAnnotator();
+            // this.updateJSON();
+        }
+    },
+    computed: {
+        labelCategories(): LabelCategory.Entity[] {
+            if (this.annotator === null) {
+                return [];
+            }
+            const result = [];
+            for (const [_, category] of this.annotator.store.labelCategoryRepo) {
+                result.push(category);
+            }
+            return result;
+        },
+        connectionCategories(): ConnectionCategory.Entity[] {
+            if (this.annotator === null) {
+                return [];
+            }
+            const result = [];
+            for (const [_, category] of this.annotator.store.connectionCategoryRepo) {
+                result.push(category);
+            }
+            return result;
+        }
+    },
     methods: {
         // updateJSON(): void {
         //     this.json = this.highlight(JSON.stringify(this.annotator.store.json, null, 4));
@@ -247,45 +286,6 @@ export default Vue.extend({
 
         onResize(){
             this.annotatorRefresh()
-        }
-    },
-    computed: {
-        labelCategories(): LabelCategory.Entity[] {
-            if (this.annotator === null) {
-                return [];
-            }
-            const result = [];
-            for (const [_, category] of this.annotator.store.labelCategoryRepo) {
-                result.push(category);
-            }
-            return result;
-        },
-        connectionCategories(): ConnectionCategory.Entity[] {
-            if (this.annotator === null) {
-                return [];
-            }
-            const result = [];
-            for (const [_, category] of this.annotator.store.connectionCategoryRepo) {
-                result.push(category);
-            }
-            return result;
-        }
-    },
-    created(): void {
-        this.$eventbus.$on("fileUploaded", (jsonData: JSON) => {
-            this.loadJSON(jsonData)
-        });
-        // this.$eventbus.$on("downloadRequest", () => {
-        //     this.download();
-        // });
-        // this.$eventbus.$on("downloadSVGRequest", () => {
-        //     this.downloadSVG();
-        // });
-    },
-    mounted(): void {
-        if (this.jsonData !== null && this.jsonData.content) {
-            this.annotator = this.createAnnotator();
-            // this.updateJSON();
         }
     },
 })
