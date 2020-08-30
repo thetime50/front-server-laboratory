@@ -22,6 +22,9 @@
         <div class="flex-none">
             <el-button type="primary" @click="logout()">注销</el-button>
         </div>
+        <div class="flex-none">
+            用户表：
+        </div>
         <userlist class="flex-auto"/>
     </template>
 </div>
@@ -97,8 +100,13 @@ export default {
                                 //拿到返回的token和username，并存到store
                                 let token = data.token;
                                 let username = data.username;
-                                this.$store.dispatch('UserLogin', token);
-                                this.$store.dispatch('UserName', username);
+                                // this.$store.dispatch('UserLogin', token);
+                                // this.$store.dispatch('UserName', username);
+                                this.$store.dispatch('UserInfo', {
+                                    ...data,
+                                    uid:data._id,
+                                });
+                                
                                 //跳到目标页
                                 // this.$router.push('HelloWorld');
                             }
