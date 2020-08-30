@@ -9,18 +9,18 @@
             <el-table-column label="人员" prop="username"/>
             <el-table-column label="文本">
                 <template v-slot="scope">
-                    {{scope.row.data.annotation && scope.row.data.annotation.content.slice(0,20)}}
+                    {{scope.row.annotation && scope.row.annotation.content.slice(0,20)}}
                 </template>
             </el-table-column>
             <el-table-column label="操作">
                 <template v-slot="scope">
-                    <el-button type="primary" @click="doedit">编辑</el-button>
-                    <el-button type="primary" @click="doedit">删除</el-button>
+                    <el-button type="primary" @click="doedit(scope.row)">编辑</el-button>
+                    <el-button type="primary" @click="dodel(scope.row._id)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
     </div>
-    <annot-detail ref="detail"/>
+    <annot-detail ref="detail" @refresh="refresh"/>
 </div>
 </template>
 
@@ -44,17 +44,28 @@ export default Vue.extend({
         };
     },
     async created(): Promise<void> {
-
-        // let result = await this.axios.annotationCreate({})
-        // console.log(result)
+        this.refresh()
     },
     computed: {
         // 
     },
     methods: {
+        async refresh(){
+            let result = await this.axios.annotationRetrive()
+            this.annotList = result.data
+        },
         async doadd(){
-            let data = await this.axios.annotationCreate()
-            this.$refs.detail.show(data.data)
+            let result = await this.axios.annotationCreate()
+            this.$refs.detail.show(result.data)
+        },
+        doedit(edata){
+            this.$refs.detail.show(edata)
+        },
+        dodel(_id){
+            (async ()=>{
+                await this.axios.annotationDelete(_id)
+                this.refresh()
+            })()
         },
     },
 })

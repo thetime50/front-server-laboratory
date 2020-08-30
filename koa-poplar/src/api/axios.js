@@ -61,7 +61,12 @@ export default {
     return (await instance.post('/api/annotation/create', {data:data})).data;
   },
   async annotationUpdate(data) {//{_id,annotation}
-    return (await instance.post('/api/annotation/update', {data:data})).data;
+    return (await instance.post('/api/annotation/update', 
+      {data:{
+        _id:data._id,
+        annotation:data.annotation,
+      }}
+    )).data;
   },
   async annotationRetrive(data) {//search condition
     return (await instance.post('/api/annotation/retrive', {data:data})).data;
