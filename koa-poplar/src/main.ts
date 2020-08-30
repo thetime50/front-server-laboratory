@@ -19,7 +19,23 @@ import './js/directives.js'
 // import promise from 'es6-promise'
 // promise.polyfill();
 
+
+//ElementUI 默认配置
 Vue.use(ElementUI, { size: 'small' });
+Vue.prototype.$message = function (msg) {
+    ElementUI.Message(msg)
+}
+Vue.prototype.$message = function (options/* ,...para:Any[] */) {
+    let def = {
+        duration: 1000,
+    }
+    options={
+        ...def,
+        ...options,
+    }
+    return ElementUI.Message(options/* ,...para */)
+}
+////////////////////////////////////////////////////////////////
 
 Vue.config.productionTip = false
 
