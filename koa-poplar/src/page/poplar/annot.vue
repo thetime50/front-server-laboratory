@@ -8,9 +8,10 @@
         <div class="flex-mean scroll-y" v-resize:throttle="onResize">
             <div class="container" ref="container"></div>
         </div>
-        <div class="flex-mean scroll-y">
+        <div class="flex-mean scroll-y" v-if="json_show">
             <!-- <code v-html="this.json"></code> -->
-            <vue-json-pretty :data="annotator && annotator.store.json"/>
+            <!-- <vue-json-pretty :data="annotator && annotator.store.json"/> -->
+            <vue-json-pretty :data="jsonData"/>
         </div>
     </div>
     <div class="flex-none bnt-nav">
@@ -63,6 +64,19 @@
                 </el-button>
             </template>
         </el-dialog>
+        <el-dialog 
+            title="文本内容" 
+            :visible.sync="cententVisible"
+            @close="cententClose">
+            <!-- width="250px"  -->
+            <el-input v-if="jsonData" type="textarea" v-model="jsonData.content"
+                :rows='5'/>
+            <template v-slot:footer>
+                <el-button @click="cententConfirm" type="primary">
+                    确定
+                </el-button>
+            </template>
+        </el-dialog>
     </div>
 </div>
 </template>
@@ -93,6 +107,7 @@ export default Vue.extend({
     },
     props:{
         json_data:{type:Object},
+        json_show:{type:Boolean,default:false},
     },
     data() {
         return {
@@ -108,7 +123,10 @@ export default Vue.extend({
             first: -1,
             second: -1,
             categorySelectMode: CategorySelectMode.Create,
-            selectedId: -1
+            selectedId: -1,
+
+            cententVisible:false,
+            cententPromise:null,//{promise,resolve,reject}
         };
     },
     async created(): Promise<void> {
@@ -312,8 +330,35 @@ export default Vue.extend({
             }
             this.$emit("confirm")
         },
+        ///////////////////////////////////////////////////////////
+        cententClose(){
+            this.cententPromise && this.cententPromise.reject()
+        },
+        cententConfirm(){
+            if(this.jsonData.content.length){
+                this.cententVisible = false
+                this.cententPromise && this.cententPromise.resolve()
+            }else{
+                this.$alert("请输入文本内容")
+            }
+        },
         editContent(){
-            console.log('editContent')
+            if(!this.cententVisible){
+                this.cententVisible = true
+                this.cententPromise ={}
+                let this_ = this
+                let promise = new Promise((resolve,reject)=>{
+                    this_.cententPromise={
+                        promise:promise,
+                        resolve,
+                        reject,
+                    }
+                })
+                promise.then(()=>{
+                    this.annotatorRefresh()
+                    this.cententPromise = null
+                })
+            }
         },
     },
     watch:{

@@ -63,5 +63,8 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
 .component-block-detail{
     background-color: #fff;
+    >div{
+        position: relative;
+    }
 }
 </style>
