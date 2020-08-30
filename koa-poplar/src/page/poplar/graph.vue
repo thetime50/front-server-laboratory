@@ -103,9 +103,9 @@ export default Vue.extend({
         };
     },
     created(): void {
-        this.$eventbus.$on("fileUploaded", (jsonData: JSON) => {
-            this.loadJSON(jsonData)
-        });
+        // this.$eventbus.$on("fileUploaded", (jsonData: JSON) => {
+        //     this.loadJSON(jsonData)
+        // });
         // this.$eventbus.$on("downloadRequest", () => {
         //     this.download();
         // });

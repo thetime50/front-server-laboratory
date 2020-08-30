@@ -28,7 +28,7 @@ Vue.prototype.axios = axios
 ///////////////////////////////////////////////////////////////////////////
 
 Vue.config.productionTip = false;
-Vue.prototype.$eventbus = new Vue();
+// Vue.prototype.$eventbus = new Vue();
 new Vue({
     router,
     store,
