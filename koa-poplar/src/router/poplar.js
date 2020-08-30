@@ -1,13 +1,13 @@
 export default {
     path: '/poplar',
-    redirect: 'poplar/graph',
+    redirect: 'poplar/annotator',
     name: 'poplar',
     component: () => import('@/page/routerviewcomp.vue'),//todo
     children:[
         {
-            path: 'graph',
-            name: 'graph',
-            component: () => import('@/page/poplar/graph.vue')
+            path: 'annotator',
+            name: 'annotator',
+            component: () => import('@/page/poplar/annotator.vue')
         },
     ],
 }

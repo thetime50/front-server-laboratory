@@ -5,9 +5,9 @@ export default {
     route:"poplar",
     children:[
         {
-            title:"graph",
+            title:"annotator",
             id:"2-1",
-            route:"graph",
+            route:"annotator",
         }
     ],
 }

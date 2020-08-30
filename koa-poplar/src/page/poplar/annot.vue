@@ -1,5 +1,8 @@
 <template>
-<div class="component-graph flex-layout">
+<div class="component-annot flex-layout">
+    <div class="text flex-none">
+        <el-input v-if="jsonData" type="textarea" v-model="jsonData.content"/>
+    </div>
     <div class="centent flex-auto flex-layout frow">
         <div class="flex-mean scroll-y" v-resize:throttle="onResize">
             <div class="container" ref="container"></div>
@@ -69,6 +72,7 @@ import {Action, Annotator} from "poplar-annotation";
 import {LabelCategory} from "poplar-annotation/dist/Store/LabelCategory";
 import {ConnectionCategory} from "poplar-annotation/dist/Store/ConnectionCategory";
 import tstest from "./tstest.vue"
+import * as annot from "./annot.js"
 import {xyy} from './demo.js'
 import vueJsonPretty from "vue-json-pretty"
 
@@ -80,7 +84,7 @@ enum CategorySelectMode {
 import Vue from "vue";
 export default Vue.extend({
 // export default ({
-    name: "graph",
+    name: "annot",
     components: {
         // tstest,
         vueJsonPretty,
@@ -295,7 +299,7 @@ export default Vue.extend({
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.component-graph{
+.component-annot{
 
     .container{
         ::v-deep{
@@ -318,13 +322,11 @@ export default Vue.extend({
     .vjs-tree.is-root{
         text-align: left;
     }
-}
-</style>
-<style rel="stylesheet/scss" lang="scss">
-.component-graph{
-    .container > svg {
-        width: 45vw;
-    }
+    
+//////////////////////////////////////
+    // .container > svg {
+    //     width: 45vw;
+    // }
 
     .poplar-annotation-label {
         font-size: 14px;
