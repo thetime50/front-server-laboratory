@@ -2,8 +2,8 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router/index";
 // import vuetify from "./plugins/vuetify";
-import "roboto-fontface/css/roboto/roboto-fontface.css";
-// import "@mdi/font/css/materialdesignicons.css";
+// import "roboto-fontface/css/roboto/roboto-fontface.css";//toso ??
+// import "@mdi/font/css/materialdesignicons.css";//toso ??
 // import i18n from "./i18n";
 
 //////////////////////////////////////////////////////////////////////////////

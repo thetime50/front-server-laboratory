@@ -1,13 +1,21 @@
 <template>
-<div class="component-graph flex-layout frow" ref="graph">
-    <div class="flex-mean">
-        <div class="container" ref="container"></div>
-    </div>
-    <div class="flex-mean">
-        <div class="code-container">
-            <!-- <code v-html="this.json"></code> -->
-            <vue-json-pretty :data="annotator && annotator.store.json"/>
+<div class="component-graph flex-layout">
+    <div class="flex-auto flex-layout frow">
+        <div class="flex-mean scroll-y">
+            <div class="container" ref="container"></div>
         </div>
+        <div class="flex-mean">
+            <div class="code-container full-block scroll-y">
+                <!-- <code v-html="this.json"></code> -->
+                <vue-json-pretty :data="annotator && annotator.store.json"/>
+            </div>
+        </div>
+    </div>
+    <div class="flex-none">
+        <el-button type="primary" @click="download"> 下载JSON</el-button>
+        <el-button type="primary" @click="downloadSVG"> 下载SVG</el-button>
+        <el-button type="primary" @click="uploadClick"> <i class="el-icon-upload"/>上传</el-button>
+        <el-button type="primary" @click="useDefault"> 使用样例</el-button>
     </div>
 
     <!-- 标签分类 -->
@@ -86,7 +94,7 @@ export default Vue.extend({
                 this.annotator.applyAction(Action.Label.Create(this.selectedLabelCategory, this.startIndex, this.endIndex));
             }
             this.showLabelCategoriesDialog = false;
-            this.updateJSON();
+            // this.updateJSON();
         },
         addConnection(): void {
             if (this.categorySelectMode === CategorySelectMode.Update) {
@@ -95,7 +103,7 @@ export default Vue.extend({
                 this.annotator.applyAction(Action.Connection.Create(this.selectedConnectionCategory, this.from, this.to));
             }
             this.showConnectionCategoriesDialog = false;
-            this.updateJSON();
+            // this.updateJSON();
         },
         createAnnotator(): Annotator {
             const annotator = new Annotator(this.jsonData, this.$refs.container as HTMLElement);
@@ -146,6 +154,38 @@ export default Vue.extend({
         //     return Prism.highlight(code, Prism.languages.javascript, "javascript");
         // },
 
+        // event
+        uploadClick(e){
+            let eli = document.createElement('input')
+            eli.type="file"
+            eli.multiple=false
+            eli.addEventListener('change',this.uploadFile)
+            eli.click()
+        },
+        uploadFile(e){
+            let reader = new FileReader();
+            reader.readAsText(e.target.files[0]);
+            reader.onload = (event) => {
+                // window.setTimeout(() => {
+                //    this.$eventbus.$emit("fileUploaded", JSON.parse(event.target.result.toString()));
+                //    this.$forceUpdate();//vue 强制刷新
+                // }, 10);
+                this.loadJSON(JSON.parse(event.target.result.toString()))
+            };
+            // this.$router.push("annotate").catch(_ => {
+            // });
+        },
+        loadJSON(jsonData:Object):void{
+            this.jsonData = jsonData;
+            if (this.annotator !== null) {
+                this.annotator.remove();
+            }
+            if (this.jsonData !== null && this.jsonData.content) {
+                this.annotator = this.createAnnotator();
+                // this.updateJSON();
+            }
+        },
+
         download: function () {
             const eleLink = document.createElement("a");
             eleLink.download = "data.json";
@@ -166,6 +206,16 @@ export default Vue.extend({
             eleLink.click();
             document.body.removeChild(eleLink);
         },
+        
+        useDefault() {
+            // window.setTimeout(() => {
+            //     this.$eventbus.$emit("fileUploaded", xyy);
+            //     this.$forceUpdate();
+            // }, 10);
+            // this.$router.push("annotate").catch(_ => {
+            // });
+            this.loadJSON(xyy)
+        }
     },
     computed: {
         labelCategories(): LabelCategory.Entity[] {
@@ -191,21 +241,14 @@ export default Vue.extend({
     },
     created(): void {
         this.$eventbus.$on("fileUploaded", (jsonData: JSON) => {
-            this.jsonData = jsonData;
-            if (this.annotator !== null) {
-                this.annotator.remove();
-            }
-            if (this.jsonData !== null && this.jsonData.content) {
-                this.annotator = this.createAnnotator();
-                this.updateJSON();
-            }
+            this.loadJSON(jsonData)
         });
-        this.$eventbus.$on("downloadRequest", () => {
-            this.download();
-        });
-        this.$eventbus.$on("downloadSVGRequest", () => {
-            this.downloadSVG();
-        });
+        // this.$eventbus.$on("downloadRequest", () => {
+        //     this.download();
+        // });
+        // this.$eventbus.$on("downloadSVGRequest", () => {
+        //     this.downloadSVG();
+        // });
     },
     mounted(): void {
         if (this.jsonData !== null && this.jsonData.content) {
@@ -237,8 +280,8 @@ export default Vue.extend({
     .container,
     .code-container {
         padding-top: 10px;
-        overflow: scroll;
-        height: calc(100vh - 64px);
+        // overflow: scroll;
+        // height: calc(100vh - 64px);
     }
 
     // code {
