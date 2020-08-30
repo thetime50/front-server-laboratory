@@ -1,8 +1,9 @@
 <template>
 <div class="component-annot flex-layout">
-    <div class="text flex-none">
-        <el-input v-if="jsonData" type="textarea" v-model="jsonData.content"/>
-    </div>
+    <!-- <div class="text flex-none">
+        <el-input v-if="jsonData" type="textarea" v-model="jsonData.content"
+            :rows='5'/>
+    </div> -->
     <div class="centent flex-auto flex-layout frow">
         <div class="flex-mean scroll-y" v-resize:throttle="onResize">
             <div class="container" ref="container"></div>
@@ -89,9 +90,12 @@ export default Vue.extend({
         // tstest,
         vueJsonPretty,
     },
+    props:{
+        json_data:{type:Object},
+    },
     data() {
         return {
-            jsonData: null,//'' as any,//Object | string//
+            // jsonData: null,//'' as any,//Object | string//
             annotator: null as Annotator | null,
             selectedLabelCategory: null as LabelCategory.Entity | null,
             selectedConnectionCategory: null as ConnectionCategory.Entity | null,
@@ -127,6 +131,14 @@ export default Vue.extend({
         }
     },
     computed: {
+        jsonData:{
+            get(){
+                return this.json_data
+            },
+            set(val){
+                this.$emit('update:json_data',val)
+            }
+        },
         labelCategories(): LabelCategory.Entity[] {
             if (this.annotator === null) {
                 return [];
@@ -295,6 +307,19 @@ export default Vue.extend({
             this.annotatorRefresh()
         }
     },
+    watch:{
+        // "jsonData.content"(){
+        //     this.annotatorRefresh()
+        // },
+        jsonData:{
+            handler(after,before){
+                if(!after){
+                    this.jsonData = annot.getProto()
+                }
+            },
+            immediate:true,
+        },
+    },
 })
 </script>
 
@@ -318,6 +343,7 @@ export default Vue.extend({
     }
     .bnt-nav{
         padding: 10px;
+        text-align: center;
     }
     .vjs-tree.is-root{
         text-align: left;

@@ -57,7 +57,16 @@ export default {
     return instance.post('/api/delUser', data);
   },
 
-  annotationCreate(data) {//annotation
-    return instance.post('/api/annotation/create', {data,data});
-  }
+  async annotationCreate(data) {//annotation
+    return (await instance.post('/api/annotation/create', {data:data})).data;
+  },
+  async annotationUpdate(data) {//{_id,annotation}
+    return (await instance.post('/api/annotation/update', {data:data})).data;
+  },
+  async annotationRetrive(data) {//search condition
+    return (await instance.post('/api/annotation/retrive', {data:data})).data;
+  },
+  async annotationDelete(_id) {//_id
+    return (await instance.post('/api/annotation/delete', {_id:_id})).data;
+  },
 }
