@@ -17,25 +17,48 @@
     </div>
 
     <!-- 标签分类 -->
-    <el-dialog 
-        title="标签分类"
-        width="150px" 
-        v-model="showLabelCategoriesDialog">
-        <el-radio-group v-model="selectedLabelCategory">
-            <el-radio :key="category.id"
-                     :label="category.text"
-                     :value="category.id"
-                     v-for="category in this.labelCategories"></el-radio>
-        </el-radio-group>
-        <template v-slot:footer>
-            <el-button @click="showLabelCategoriesDialog = false" type="primary">
-                取消
-            </el-button>
-            <el-button @click="addLabel" type="primary">
-                确定
-            </el-button>
-        </template>
-    </el-dialog>
+    <div class="dialog-wrap flex-none">
+        <el-dialog 
+            title="标签分类"
+            width="250px" 
+            :visible.sync="showLabelCategoriesDialog">
+            <el-radio-group v-model="selectedLabelCategory">
+                <div v-for="category in this.labelCategories">
+                    <el-radio :key="category.id"
+                        :label="category.id"
+                        >{{category.text}}</el-radio>
+                </div>
+            </el-radio-group>
+            <template v-slot:footer>
+                <el-button @click="showLabelCategoriesDialog = false" type="primary">
+                    取消
+                </el-button>
+                <el-button @click="addLabel" type="primary">
+                    确定
+                </el-button>
+            </template>
+        </el-dialog>
+        <el-dialog 
+            title="连接分类" 
+            width="250px" 
+            :visible.sync="showConnectionCategoriesDialog">
+            <el-radio-group v-model="selectedConnectionCategory">
+                <div v-for="category in this.connectionCategories">
+                    <el-radio :key="category.id"
+                        :label="category.id"
+                        >{{category.text}}</el-radio>
+                </div>
+            </el-radio-group>
+            <template v-slot:footer>
+                <el-button @click="showConnectionCategoriesDialog = false" type="primary">
+                    取消
+                </el-button>
+                <el-button @click="addConnection" type="primary">
+                    确定
+                </el-button>
+            </template>
+        </el-dialog>
+    </div>
 </div>
 </template>
 
@@ -106,18 +129,21 @@ export default Vue.extend({
         createAnnotator(): Annotator {
             const annotator = new Annotator(this.jsonData, this.$refs.container as HTMLElement);
             annotator.on("textSelected", (startIndex, endIndex) => {
+                // console.log("textSelected")
                 this.startIndex = startIndex;
                 this.endIndex = endIndex;
                 this.categorySelectMode = CategorySelectMode.Create;
                 this.showLabelCategoriesDialog = true;
             });
             annotator.on("twoLabelsClicked", (fromLabelId, toLabelId) => {
+                // console.log("twoLabelsClicked")
                 this.from = fromLabelId;
                 this.to = toLabelId;
                 this.categorySelectMode = CategorySelectMode.Create;
                 this.showConnectionCategoriesDialog = true;
             });
             annotator.on("labelRightClicked", (labelId, event: MouseEvent) => {
+                // console.log("labelRightClicked")
                 if (event.ctrlKey) {
                     this.categorySelectMode = CategorySelectMode.Update;
                     this.selectedId = labelId;
@@ -128,6 +154,7 @@ export default Vue.extend({
                 // this.updateJSON();
             });
             annotator.on("connectionRightClicked", (connectionId, event: MouseEvent) => {
+                // console.log("connectionRightClicked")
                 if (event.ctrlKey) {
                     this.categorySelectMode = CategorySelectMode.Update;
                     this.selectedId = connectionId;
@@ -270,7 +297,7 @@ export default Vue.extend({
     .container{
         ::v-deep{
             textarea{
-                width: 100% !important;
+                width: auto !important;
                 color: #123456;
             }
         }
@@ -284,6 +311,9 @@ export default Vue.extend({
     }
     .bnt-nav{
         padding: 10px;
+    }
+    .vjs-tree.is-root{
+        text-align: left;
     }
 }
 </style>
