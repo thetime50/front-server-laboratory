@@ -57,7 +57,7 @@ export default {
     return instance.post('/api/delUser', data);
   },
 
-  annotationCreate(data) {
-    return instance.post('/api/annotation/create', data);
+  annotationCreate(data) {//annotation
+    return instance.post('/api/annotation/create', {data,data});
   }
 }

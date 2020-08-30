@@ -113,8 +113,8 @@ export default Vue.extend({
         //     this.downloadSVG();
         // });
 
-        let result = await this.axios.annotationCreate({data:123})
-        console.log(result)
+        // let result = await this.axios.annotationCreate({})
+        // console.log(result)
     },
     mounted(): void {
         if (this.jsonData !== null && this.jsonData.content) {
