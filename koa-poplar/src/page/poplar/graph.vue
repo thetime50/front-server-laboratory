@@ -1,17 +1,15 @@
 <template>
 <div class="component-graph flex-layout">
-    <div class="flex-auto flex-layout frow">
-        <div class="flex-mean scroll-y">
+    <div class="centent flex-auto flex-layout frow">
+        <div class="flex-mean scroll-y" v-resize:throttle="onResize">
             <div class="container" ref="container"></div>
         </div>
-        <div class="flex-mean">
-            <div class="code-container full-block scroll-y">
-                <!-- <code v-html="this.json"></code> -->
-                <vue-json-pretty :data="annotator && annotator.store.json"/>
-            </div>
+        <div class="flex-mean scroll-y">
+            <!-- <code v-html="this.json"></code> -->
+            <vue-json-pretty :data="annotator && annotator.store.json"/>
         </div>
     </div>
-    <div class="flex-none">
+    <div class="flex-none bnt-nav">
         <el-button type="primary" @click="download"> 下载JSON</el-button>
         <el-button type="primary" @click="downloadSVG"> 下载SVG</el-button>
         <el-button type="primary" @click="uploadClick"> <i class="el-icon-upload"/>上传</el-button>
@@ -33,9 +31,9 @@
             <el-button @click="showLabelCategoriesDialog = false" type="primary">
                 取消
             </el-button>
-            <v-btn @click="addLabel" type="primary">
+            <el-button @click="addLabel" type="primary">
                 确定
-            </v-btn>
+            </el-button>
         </template>
     </el-dialog>
 </div>
@@ -175,8 +173,7 @@ export default Vue.extend({
             // this.$router.push("annotate").catch(_ => {
             // });
         },
-        loadJSON(jsonData:Object):void{
-            this.jsonData = jsonData;
+        annotatorRefresh(){
             if (this.annotator !== null) {
                 this.annotator.remove();
             }
@@ -184,6 +181,10 @@ export default Vue.extend({
                 this.annotator = this.createAnnotator();
                 // this.updateJSON();
             }
+        },
+        loadJSON(jsonData:Object):void{
+            this.jsonData = jsonData;
+            this.annotatorRefresh()
         },
 
         download: function () {
@@ -215,6 +216,10 @@ export default Vue.extend({
             // this.$router.push("annotate").catch(_ => {
             // });
             this.loadJSON(xyy)
+        },
+
+        onResize(){
+            this.annotatorRefresh()
         }
     },
     computed: {
@@ -261,37 +266,25 @@ export default Vue.extend({
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 .component-graph{
-    .code-container-wrapper,
-    .container-wrapper {
-        min-height: calc(100vh - 64px);
-        max-height: calc(100vh - 64px);
-        overflow: hidden;
-        padding: 0 !important;
+
+    .container{
+        ::v-deep{
+            textarea{
+                width: 100% !important;
+                color: #123456;
+            }
+        }
     }
 
-    .container-wrapper {
-        border-right: solid 2px black;
+    .centent{
+        >div{
+            padding:10px;
+            padding-bottom: 0;
+        }
     }
-
-    .code-container-wrapper {
-        border-left: solid 2px black;
+    .bnt-nav{
+        padding: 10px;
     }
-
-    .container,
-    .code-container {
-        padding-top: 10px;
-        // overflow: scroll;
-        // height: calc(100vh - 64px);
-    }
-
-    // code {
-    //     max-width: calc(45vw - 16px);
-    //     background: rgb(32, 32, 32) !important;
-    //     box-shadow: none !important;
-    //     padding: 8px !important;
-    //     padding-right: 40px !important;
-    //     margin-bottom: 20px;
-    // }
 }
 </style>
 <style rel="stylesheet/scss" lang="scss">
