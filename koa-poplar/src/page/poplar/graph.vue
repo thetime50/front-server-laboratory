@@ -102,7 +102,7 @@ export default Vue.extend({
             selectedId: -1
         };
     },
-    created(): void {
+    async created(): Promise<void> {
         // this.$eventbus.$on("fileUploaded", (jsonData: JSON) => {
         //     this.loadJSON(jsonData)
         // });
@@ -112,6 +112,9 @@ export default Vue.extend({
         // this.$eventbus.$on("downloadSVGRequest", () => {
         //     this.downloadSVG();
         // });
+
+        let result = await this.axios.annotationCreate({data:123})
+        console.log(result)
     },
     mounted(): void {
         if (this.jsonData !== null && this.jsonData.content) {
