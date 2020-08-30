@@ -18,6 +18,7 @@
         <el-button type="primary" @click="downloadSVG"> 下载SVG</el-button>
         <el-button type="primary" @click="uploadClick"> <i class="el-icon-upload"/>上传</el-button>
         <el-button type="primary" @click="useDefault"> 使用样例</el-button>
+        <el-button @click="confirm" type="primary">确定</el-button>
     </div>
 
     <!-- 标签分类 -->
@@ -125,10 +126,7 @@ export default Vue.extend({
         // console.log(result)
     },
     mounted(): void {
-        if (this.jsonData !== null && this.jsonData.content) {
-            this.annotator = this.createAnnotator();
-            // this.updateJSON();
-        }
+        this.annotatorRefresh()
     },
     computed: {
         jsonData:{
@@ -259,8 +257,9 @@ export default Vue.extend({
             // });
         },
         annotatorRefresh(){
-            if (this.annotator !== null) {
+            if (this.annotator) {
                 this.annotator.remove();
+                this.annotator = null
             }
             if (this.jsonData !== null && this.jsonData.content) {
                 this.annotator = this.createAnnotator();
@@ -305,16 +304,31 @@ export default Vue.extend({
 
         onResize(){
             this.annotatorRefresh()
-        }
+        },
+
+        confirm(){
+            if(this.annotator){
+                this.jsonData = this.annotator.store.json
+            }
+            this.$emit("confirm")
+        },
+        editContent(){
+            console.log('editContent')
+        },
     },
     watch:{
-        // "jsonData.content"(){
-        //     this.annotatorRefresh()
-        // },
+        "jsonData.content":{
+            handler(after,before){
+                if(after === ''){
+                    this.editContent()
+                }
+            },
+            immediate:true,
+        },
         jsonData:{
             handler(after,before){
                 if(!after){
-                    this.jsonData = annot.getProto()
+                    this.loadJSON(annot.getProto())
                 }
             },
             immediate:true,

@@ -1,5 +1,5 @@
 <template>
-<div class="component-annotaton flex-layout">
+<div class="component-annotation flex-layout">
     <el-form><!--  :model=""> -->
       <!-- <el-form-item label=""></el-form-item> -->
       <el-button type="trimary" @click="doadd">新增</el-button>
@@ -9,7 +9,7 @@
             <el-table-column label="人员" prop="username"/>
             <el-table-column label="文本">
                 <template v-slot="scope">
-                    {{scope.row.data.annotaton && scope.row.data.annotaton.content.slice(0,20)}}
+                    {{scope.row.data.annotation && scope.row.data.annotation.content.slice(0,20)}}
                 </template>
             </el-table-column>
             <el-table-column label="操作">
@@ -32,7 +32,7 @@ import annotDetail from "./annotDetail.vue"
 import Vue from "vue";
 export default Vue.extend({
 // export default ({
-    name: "annotaton",
+    name: "annotation",
     components: {
         annotDetail,
     },
@@ -61,7 +61,7 @@ export default Vue.extend({
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.component-annotaton{
+.component-annotation{
     position: relative;
     padding: 10px;
     text-align: left;

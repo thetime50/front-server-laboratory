@@ -1,4 +1,4 @@
-function getProto(content){
+function getProto(content = ""){
     return {
         "version":"0.0.1",
         "content": content,

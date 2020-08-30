@@ -4,7 +4,7 @@
     title="编辑">
     <div class="annot abs-full-block" v-if="edata">
         <annot class="full-block" 
-            :json_data="edata.annotaton"/>
+            :json_data.sync="edata.annotation"/>
     </div>
 </block-detail>
 </template>

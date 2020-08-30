@@ -1,13 +1,13 @@
 export default {
     path: '/poplar',
-    redirect: 'poplar/annotaton',
+    redirect: 'poplar/annotation',
     name: 'poplar',
     component: () => import('@/page/routerviewcomp.vue'),//todo
     children:[
         {
-            path: 'annotaton',
-            name: 'annotaton',
-            component: () => import('@/page/poplar/annotaton.vue')
+            path: 'annotation',
+            name: 'annotation',
+            component: () => import('@/page/poplar/annotation.vue')
         },
     ],
 }
