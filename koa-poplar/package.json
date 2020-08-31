@@ -19,6 +19,7 @@
     "poplar-annotation": "^2.0.3",
     "prismjs": "^1.21.0",
     "roboto-fontface": "*",
+    "sass-resources-loader": "^2.1.0",
     "vue": "^2.6.10",
     "vue-class-component": "^7.0.2",
     "vue-json-pretty": "^1.6.7",
