@@ -1,6 +1,12 @@
 <template>
-<div class="component-home">
-    home
+<div class="component-home flex-layout justify-center">
+    <div class="page flex-none">home</div>
+    <div class="demo flex-auto">
+        thetime50 demo <br>
+        <a href="https://github.com/thetime50/front-server-laboratory/tree/master/koa-poplar">
+            github.com koa-poplar doc
+        </a>
+    </div>
 </div>
 </template>
 
@@ -18,6 +24,13 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 .component-home{
-    font-size: 60px;
+    .page{
+        padding: 40px;
+        font-size: 60px;
+    }
+    .demo{
+        padding: 20px;
+        font-size: 36px;
+    }
 }
 </style>
