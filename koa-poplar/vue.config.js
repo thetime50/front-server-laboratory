@@ -14,7 +14,8 @@ module.exports = {
     https: false,
     proxy: {
       '/api': {
-        target: 'http://localhost:8888',
+        target: 'http://localhost:58888',
+        // target: 'http://thetime50.com:58888',
         changeOrigin: true,
       }
     },
