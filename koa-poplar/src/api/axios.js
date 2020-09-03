@@ -2,8 +2,16 @@ import axios from 'axios'
 import store from '../store'
 import router from '../router/index'
 
+const devBaseURL = 'http://localhost:58888'
+// const devBaseURL = ''
+const prodBaseURL = 'http://www.thetime50.com:58888'
+
+const baseURL = window.location.hostname == 'localhost'?devBaseURL:prodBaseURL
+
 //创建axios实例
+// axios.defaults.withCredentials = true
 var instance = axios.create({
+  baseURL: baseURL, // todo 后面肯传相对路径
   timeout: 5000, //请求超过5秒即超时返回错误
   headers: { 'Content-Type': 'application/json;charset=UTF-8' },
 });
