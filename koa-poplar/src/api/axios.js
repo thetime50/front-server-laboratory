@@ -54,7 +54,7 @@ export default {
   },
   //用户登录
   userLogin(data) {
-    return axios.post('/api/login', data);  
+    return instance.post('/api/login', data);  
   },
   //获取用户
   getUser() {
