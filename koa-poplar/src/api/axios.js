@@ -4,7 +4,7 @@ import router from '../router/index'
 
 const devBaseURL = 'http://localhost:58888'
 // const devBaseURL = ''
-const prodBaseURL = 'http://www.thetime50.com:58888'
+const prodBaseURL = 'http://koa.thetime50.com:58888'
 
 const baseURL = window.location.hostname == 'localhost'?devBaseURL:prodBaseURL
 
